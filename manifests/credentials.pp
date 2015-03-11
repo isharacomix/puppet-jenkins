@@ -18,6 +18,7 @@
 #
 define jenkins::credentials (
   $password,
+  $credential_id = '',
   $description = 'Managed by Puppet',
   $private_key_or_path = '',
   $ensure = 'present',
@@ -39,6 +40,7 @@ define jenkins::credentials (
           "'${password}'",
           "'${description}'",
           "'${private_key_or_path}'",
+          "'${credential_id}'",
         ], ' '),
         require   => Class['::jenkins::cli_helper'],
         unless    => "${::jenkins::cli_helper::helper_cmd} credential_info ${title} | grep ${title}",
