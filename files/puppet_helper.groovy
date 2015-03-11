@@ -130,7 +130,7 @@ class Actions {
   /////////////////////////
   // create credentials
   /////////////////////////
-  void create_or_update_credentials(String username, String password, String description="", String private_key="") {
+  void create_or_update_credentials(String username, String password, String description="", String private_key="", String credential_id="") {
     def global_domain = Domain.global()
     def credentials_store =
       Jenkins.instance.getExtensionList(
@@ -138,10 +138,13 @@ class Actions {
       )[0].getStore()
     
     def credentials
+    if (credential_id == "") {
+      credential_id = null
+    }
     if (private_key == "" ) {
       credentials = new UsernamePasswordCredentialsImpl(
         CredentialsScope.GLOBAL,
-        null,
+        credential_id,
         description,
         username,
         password
@@ -155,7 +158,7 @@ class Actions {
       }
       credentials = new BasicSSHUserPrivateKey(
         CredentialsScope.GLOBAL,
-        null,
+        credential_id,
         username,
         key_source,
         password,
